@@ -51,5 +51,13 @@ public class EnhanceDate {
         return String.format("%d/%d/%d", month, day, year);
     }
 
+    public void nextDay() {
+        if (day == daysPerMonth[month]) {
+            day = 1;
+            month++;
+        }
+        else day++;
+    }
+
 
 }

@@ -1,5 +1,6 @@
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class TestEnhanceDate {
@@ -18,4 +19,11 @@ public class TestEnhanceDate {
         assertThrows(IllegalArgumentException.class, () -> new EnhanceDate(20235, 2, 28));
     }
 
+    @Test
+    public void testThatDayCanIncrementByOne() {
+        EnhanceDate enhanceDate = new EnhanceDate(2025, 10, 17);
+        enhanceDate.nextDay();
+        String expected = "10/18/2025";
+        assertEquals(expected, enhanceDate.toString());
+    }
 }
