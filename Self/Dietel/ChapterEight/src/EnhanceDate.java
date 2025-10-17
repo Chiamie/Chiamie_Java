@@ -52,9 +52,20 @@ public class EnhanceDate {
     }
 
     public void nextDay() {
-        if (day == daysPerMonth[month]) {
+        boolean isLeapYear = (year % 400 == 0 || (year % 4 == 0 && year % 100 != 0));
+        if (day == daysPerMonth[month] && month != 12 && !isLeapYear) {
             day = 1;
             month++;
+        }
+        else if (day == daysPerMonth[month] + 1 && month == 2 && isLeapYear) {
+            day = 1;
+            month++;
+        }
+
+        else if (day == daysPerMonth[month] && month == 12) {
+            day = 1;
+            month = 1;
+            year++;
         }
         else day++;
     }
