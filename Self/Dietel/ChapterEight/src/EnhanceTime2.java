@@ -69,7 +69,6 @@ public class EnhanceTime2 {
         this.second = second;
     }
 
-
     public int getHour() {return this.hour;}
     public int getMinute() {return this.minute;}
     public int getSecond() {return this.second;}
@@ -78,12 +77,50 @@ public class EnhanceTime2 {
         return String.format("%02d:%02d:%02d", getHour(), getMinute(), getSecond());
     }
 
-
     public String toString() {
         return String.format("%d:%02d:%02d %s",
                 ((getHour() == 0 || getHour() == 12) ? 12 : getHour() % 12),
                 getMinute(), getSecond(), (getHour() < 12 ? "AM" : "PM"));
+    }
+
+    public void tick(){
+        if (this.second == 59) {
+            this.second = 0;
+            this.minute++;
         }
+        else
+            this.second++;
+    }
+
+    public void incrementMinute(){
+        if (this.minute == 59){
+            this.minute = 0;
+            this.hour++;
+        }
+        else if (this.minute == 60){
+            this.minute = 0;
+            this.hour++;
+        }
+        else
+            this.minute++;
+    }
+
+    public void incrementHour(){
+        if  (this.hour == 24)
+            this.hour = 0;
+        else
+            this.hour++;
+    }
+
+    public void incrementTime(){
+        tick();
+        incrementMinute();
+        incrementHour();
+    }
+
+
+
+
     }
 
 

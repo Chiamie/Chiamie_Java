@@ -29,15 +29,15 @@ public class CommissionEmployee extends Object {
 		
 	}
 	
-	public String getFirstName { return firstName; }
+	public String getFirstName() { return firstName; }
 	
-	public String getlastName { return lastName; }
+	public String getlastName() { return lastName; }
 	
-	public String getsocialSecurityNumber { return socialSecurityNumber; }
+	public String getsocialSecurityNumber() { return socialSecurityNumber; }
 	
-	public double getcommissionRate { return commissionRate; }
+	public double getcommissionRate() { return commissionRate; }
 	
-	public double getgrossSalesAmount { return grossSalesAmount; }
+	public double getgrossSalesAmount() { return grossSalesAmount; }
 	
 	public void setcommissionRate(double commissionRate){
 		validateCommissionRate();
@@ -49,12 +49,12 @@ public class CommissionEmployee extends Object {
 		this.grossSalesAmount = grossSalesAmount;
 	}
 	
-	@override
+	@Override
 	public String toString(){
 		return String.format("%s: %s %s%n%s: %s%n%s: %.2f%n%s: %.2f", 
 		"commission employee", firstName, lastName,
 		"social security number", socialSecurityNumber,
-		"gross sales", grossSales,
+		"gross sales", grossSalesAmount,
 		"commission rate", commissionRate);
 		
 	}
@@ -63,7 +63,7 @@ public class CommissionEmployee extends Object {
 	
 	
 	
-	}
+
 
 
 
