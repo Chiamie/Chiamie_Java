@@ -1,9 +1,9 @@
 public class CommissionEmployee extends Object {
-	private final String firstName;
-	private final String lastName;
-	private final String socialSecurityNumber;
-	private double commissionRate;
-	private double grossSalesAmount;
+	protected final String firstName;
+	protected final String lastName;
+	protected final String socialSecurityNumber;
+	protected double commissionRate;
+	protected double grossSalesAmount;
 	
 	private void validateGrossSalesAmount(){
 		if(grossSalesAmount < 0.0)
@@ -31,23 +31,27 @@ public class CommissionEmployee extends Object {
 	
 	public String getFirstName() { return firstName; }
 	
-	public String getlastName() { return lastName; }
+	public String getLastName() { return lastName; }
 	
-	public String getsocialSecurityNumber() { return socialSecurityNumber; }
+	public String getSocialSecurityNumber() { return socialSecurityNumber; }
 	
-	public double getcommissionRate() { return commissionRate; }
+	public double getCommissionRate() { return commissionRate; }
 	
-	public double getgrossSalesAmount() { return grossSalesAmount; }
+	public double getGrossSalesAmount() { return grossSalesAmount; }
 	
-	public void setcommissionRate(double commissionRate){
+	public void setCommissionRate(double commissionRate){
 		validateCommissionRate();
 		this.commissionRate = commissionRate;
 	}
 	
-	public void setgrossSalesAmount(double grossSalesAmount){
+	public void setGrossSalesAmount(double grossSalesAmount){
 		validateGrossSalesAmount();
 		this.grossSalesAmount = grossSalesAmount;
 	}
+
+    public double earnings(){
+        return commissionRate * grossSalesAmount;
+    }
 	
 	@Override
 	public String toString(){
