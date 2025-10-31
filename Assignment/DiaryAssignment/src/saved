@@ -1,0 +1,135 @@
+import java.util.Scanner;
+
+public class MainApplication {
+    private static Diaries diaries = new Diaries();
+
+    public static void main(String[] args) {
+
+        String response = input("Choose one of the following:");
+        print(displayMenu());
+        switch (response) {
+            case "1":
+                String username = input("Enter your username: ");
+                username = collectUsername(username);
+                String password = input("Enter your password: ");
+                diaries.add(password, username);
+                break;
+
+//            case "2":
+//                username = input("Enter your username: ");
+//                password = input("Enter your old password: ");
+//                String newPassword = input("Enter your new password: ");
+//                Diary diary = diaries.findByUsername(username);
+//                diary.setPassword(password, newPassword);
+//                break;
+//            case "3":
+//                username = input("Enter your username: ");
+//                password = input("Enter your new password: ");
+//                diary = diaries.findByUsername(username);
+//                diary.setUsername(password, username);
+            case "2":
+                username = input("Enter your username: ");
+                username = collectUsername(username);
+                Diary diary = diaries.findByUsername(username);
+                String title = input("Enter your title: ");
+                String content = input("Enter your content: ");
+                diary.createEntry(title, content);
+
+                username = input("Enter your username: ");
+                username = collectUsername(username);
+                diary = diaries.findByUsername(username);
+                title = input("Enter your title: ");
+                content = input("Enter your content: ");
+                int iD = Integer.parseInt(input("Enter your ID"));
+                diary.updateEntry(iD, title, content);
+
+                username = input("Enter your username: ");
+                username = collectUsername(username);
+                diary = diaries.findByUsername(username);
+                title = input("Enter your title: ");
+                content = input("Enter your content: ");
+                iD = Integer.parseInt(input("Enter your ID"));
+                diary.deleteEntry(iD);
+
+                username = input("Enter your username: ");
+                username = collectUsername(username);
+                diary = diaries.findByUsername(username);
+                title = input("Enter your title: ");
+                content = input("Enter your content: ");
+                iD = Integer.parseInt(input("Enter your ID"));
+                diary.findEntryById(iD);
+
+        }
+
+
+    }
+
+    public static String displayMenu() {
+        String menu = """
+                                1. Create Diary;
+                //                2. Change Password;
+                //                3. Change Username;
+                                4. MyDiary => Add new; Update; delete; read;
+                                5. Delete;
+                                6. Status => Existing User; New Userlock; unlock;
+                                7. exit System.exit;
+                                8.
+                                1. New User: Create Diary(after creating lock)
+                                2. Existing User: Change Password
+                """;
+        return menu;
+    }
+
+    public static String input(String prompt) {
+        Scanner scanner = new Scanner(System.in);
+        print(prompt);
+        return scanner.next();
+    }
+
+    public static void print(String prompt) {
+        System.out.println(prompt);
+    }
+
+    private static boolean validateInput(String prompt) {
+        if (prompt.isEmpty()) return false;
+        return isAlphanumeric(prompt);
+    }
+
+    private static boolean isDigit(String prompt) {
+        boolean result = false;
+        for (int index = 0; index < prompt.length(); index++) {
+            if (Character.isDigit(prompt.charAt(index)))
+                result = true;
+        }
+        return result;
+    }
+
+    private static boolean isLetter(String prompt) {
+        boolean result = false;
+        for (int index = 0; index < prompt.length(); index++) {
+            if (Character.isLetter(prompt.charAt(index)))
+                result = true;
+        }
+        return result;
+    }
+
+    private static boolean isAlphanumeric(String prompt) {
+        boolean result = false;
+        for (int index = 0; index < prompt.length(); index++) {
+            if (isLetter(prompt) && isDigit(prompt))
+                result = true;
+        }
+        return result;
+    }
+
+    private static String collectUsername(String username) {
+        while (!validateInput(username)) {
+            username = input(input("Enter your username: "));
+        }
+        return username;
+    }
+
+
+
+
+}
