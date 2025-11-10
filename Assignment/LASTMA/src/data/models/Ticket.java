@@ -1,6 +1,7 @@
 package data.models;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class Ticket {
     private int id;
@@ -10,6 +11,11 @@ public class Ticket {
     private LocalDateTime dateOfBooking;
     private Officer issuer;
     private LocalDateTime dateOfPayment;
+
+    public Ticket(Vehicle vehicle) {
+        this.vehicle = vehicle;
+
+    }
 
     public int getId() {
         return id;
@@ -66,4 +72,5 @@ public class Ticket {
     public void setDateOfPayment(LocalDateTime dateOfPayment) {
         this.dateOfPayment = dateOfPayment;
     }
+
 }

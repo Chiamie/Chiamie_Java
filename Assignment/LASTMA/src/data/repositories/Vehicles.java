@@ -1,7 +1,7 @@
 package data.repositories;
 
 import data.models.Vehicle;
-import data.repositories.exceptions.InvalidIdException;
+import exceptions.InvalidIdException;
 
 import java.util.ArrayList;
 import java.util.List;
