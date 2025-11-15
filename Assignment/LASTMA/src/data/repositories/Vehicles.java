@@ -1,5 +1,6 @@
 package data.repositories;
 
+import data.models.Ticket;
 import data.models.Vehicle;
 import exceptions.InvalidIdException;
 
@@ -8,7 +9,7 @@ import java.util.List;
 
 public class Vehicles implements VehicleRepository {
     private int count;
-    private List<Vehicle> vehicles = new ArrayList<>();
+    private static List<Vehicle> vehicles = new ArrayList<>();
 
     @Override
     public Vehicle findById(int id) {
@@ -16,16 +17,24 @@ public class Vehicles implements VehicleRepository {
             if (vehicle.getId() == id) return vehicle;
         }
 
-        throw new InvalidIdException("Vehicle with ID number - " + id + " not found");
+        return null;
     }
 
     @Override
-    public void save(Vehicle vehicle) {
+    public Vehicle save(Vehicle vehicle) {
         if (vehicle.getId() == 0) {
             generateId();
             vehicle.setId(count);
             vehicles.add(vehicle);
+            return vehicle;
         }
+        else {
+            for (int index = 0; index < vehicles.size(); index++) {
+                if (vehicles.get(index).getId() == vehicle.getId())
+                    vehicles.set(index, vehicle);
+            }
+        }
+       return vehicle;
     }
 
     private void generateId() {
@@ -40,7 +49,6 @@ public class Vehicles implements VehicleRepository {
     @Override
     public void delete(Vehicle vehicle) {
         vehicles.remove(vehicle);
-        count--;
     }
 
     @Override
@@ -51,7 +59,6 @@ public class Vehicles implements VehicleRepository {
     @Override
     public void deleteAll() {
         vehicles.clear();
-        count = 0;
     }
 
     @Override
@@ -59,12 +66,21 @@ public class Vehicles implements VehicleRepository {
         for (Vehicle vehicle : vehicles) {
             if (vehicle.getId() == id) vehicles.remove(vehicle);
         }
-        count--;
 
     }
 
     @Override
     public long count() {
-        return count;
+        return vehicles.size();
     }
+
+    @Override
+    public Vehicle findByChasisNumber(String chasisNumber) {
+        for (Vehicle vehicle : vehicles) {
+            if (vehicle.getChasisNumber().equals(chasisNumber)) return vehicle;
+        }
+        return null;
+    }
+
+
 }

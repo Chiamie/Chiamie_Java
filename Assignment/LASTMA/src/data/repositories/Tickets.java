@@ -11,17 +11,22 @@ import java.util.List;
 public class Tickets implements TicketRepository {
     private int count;
     private List<Ticket> tickets = new ArrayList<>();
-//    private Vehicle vehicle;
-//
-//    public Tickets(Vehicle vehicle) {
-//        this.vehicle = vehicle;
-//    }
 
     @Override
-    public void save(Ticket ticket) {
-        generateTicketNumber();
-        ticket.setId(count);
-        tickets.add(ticket);
+    public Ticket save(Ticket ticket) {
+        if (ticket.getId() == 0) {
+            generateTicketNumber();
+            ticket.setId(count);
+            tickets.add(ticket);
+            return ticket;
+        }
+        else {
+            for (int index = 0; index < tickets.size(); index++) {
+                if (tickets.get(index).getId() == ticket.getId())
+                    tickets.set(index, ticket);
+            }
+        }
+        return ticket;
     }
 
     private void generateTicketNumber() {
@@ -33,21 +38,21 @@ public class Tickets implements TicketRepository {
         for(Ticket ticket: tickets){
             if(ticket.getId() == ticketNumber) return ticket;
         }
-        throw new InvalidIdException("Ticket number " + ticketNumber + " not found");
+        return null;
     }
 
-    @Override
-    public List<Ticket> findByOffence(Offence offence) {
-        return List.of();
-    }
+//    @Override
+//    public List<Ticket> findByOffence(Offence offence) {
+//        return List.of();
+//    }
 
-    @Override
-    public List<Ticket> findAllByVehicleId(int vehicleId) {
-        for(Ticket ticket: tickets){
-            if(ticket.getVehicle().getId() == vehicleId) return tickets;
-        }
-        throw new InvalidIdException("Vehicle id " + vehicleId + " not found");
-    }
+//    @Override
+//    public List<Ticket> findAllByVehicleId(int vehicleId) {
+//        for(Ticket ticket: tickets){
+//            if(ticket.getVehicle().getId() == vehicleId) return tickets;
+//        }
+//        throw new InvalidIdException("Vehicle id " + vehicleId + " not found");
+//    }
 
     @Override
     public List<Ticket> findAll() {
@@ -56,8 +61,12 @@ public class Tickets implements TicketRepository {
 
     @Override
     public void delete(int ticketNumber) {
-        if(!tickets.removeIf(ticket -> ticket.getId() == ticketNumber))
-            throw new InvalidIdException("Ticket number " + ticketNumber + " not found");
+        for(Ticket ticket: tickets){
+            if(ticket.getId() == ticketNumber) {
+                tickets.remove(ticket);
+                break;
+            }
+        }
     }
 
     @Override
@@ -67,7 +76,7 @@ public class Tickets implements TicketRepository {
 
     @Override
     public void delete(Ticket ticketToBeDeleted) {
-        if(!tickets.remove(ticketToBeDeleted)) throw new InvalidTicketException("Ticket  " + ticketToBeDeleted + " not found");
+        tickets.remove(ticketToBeDeleted);
     }
 
     @Override

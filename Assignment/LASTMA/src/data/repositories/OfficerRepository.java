@@ -12,4 +12,6 @@ public interface OfficerRepository {
     void deleteAll();
     void deleteById(int id);
     long count();
+
+    Officer findByEmail(String officerEmail);
 }

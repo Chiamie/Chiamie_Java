@@ -1,22 +1,20 @@
 package data.repositories;
 
 import data.models.Officer;
-import exceptions.InvalidIdException;
-import exceptions.InvalidOfficerException;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Officers implements OfficerRepository {
     private int count;
-    private List<Officer> officers =  new ArrayList<Officer>();
+    private static List<Officer> officers =  new ArrayList<Officer>();
 
     @Override
     public Officer findById(int id) {
         for (Officer officer : officers) {
             if (officer.getId() == id) return officer;
         }
-        throw new InvalidIdException("Officer with id " + id + " not found");
+        return null;
     }
 
     @Override
@@ -32,9 +30,11 @@ public class Officers implements OfficerRepository {
 
     @Override
     public void delete(Officer officer) {
-        if(!officers.remove(officer))
-            throw new InvalidOfficerException("Officer " + officer + " not found");
+//        if(!officers.remove(officer))
+//            throw new InvalidOfficerException("Officer " + officer + " not found");
+        officers.remove(officer);
     }
+
 
     @Override
     public List<Officer> findAll() {
@@ -43,7 +43,7 @@ public class Officers implements OfficerRepository {
 
     @Override
     public void deleteAll() {
-
+        officers.clear();
     }
 
     @Override
@@ -54,5 +54,12 @@ public class Officers implements OfficerRepository {
     @Override
     public long count() {
         return officers.size();
+    }
+
+    @Override
+    public Officer findByEmail(String officerEmail) {
+        for (Officer officer : officers)
+            if (officer.getOfficerEmail().equals(officerEmail)) return officer;
+        return null;
     }
 }
