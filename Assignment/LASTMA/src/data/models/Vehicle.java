@@ -1,6 +1,7 @@
 package data.models;
 
 import java.time.Year;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Vehicle {
@@ -11,7 +12,24 @@ public class Vehicle {
     private Year year;
     private String plateNumber;
     private Owner owner;
-    private List<Ticket> tickets;
+    private List<Ticket> tickets = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return "Vehicle{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", model='" + model + '\'' +
+                ", color='" + color + '\'' +
+                ", year=" + year +
+                ", plateNumber='" + plateNumber + '\'' +
+                ", owner=" + owner +
+                ", tickets=" + tickets +
+                ", chasisNumber='" + chasisNumber + '\'' +
+                '}';
+    }
+
+    private String chasisNumber;
 
     public int getId() {
         return id;
@@ -75,5 +93,13 @@ public class Vehicle {
 
     public void setTickets(List<Ticket> tickets) {
         this.tickets = tickets;
+    }
+
+    public String getChasisNumber() {
+        return chasisNumber;
+    }
+
+    public void setChasisNumber(String chasisNumber) {
+        this.chasisNumber = chasisNumber;
     }
 }

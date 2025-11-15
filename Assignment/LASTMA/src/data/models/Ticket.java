@@ -12,14 +12,22 @@ public class Ticket {
     private Officer issuer;
     private LocalDateTime dateOfPayment;
 
-    public Ticket(Vehicle vehicle) {
-        this.vehicle = vehicle;
-
+    @Override
+    public String toString() {
+        return "Ticket{" +
+                "id=" + id +
+                ", offence=" + offence +
+                ", hasPaid=" + hasPaid +
+                ", dateOfBooking=" + dateOfBooking +
+                ", issuer=" + issuer +
+                ", dateOfPayment=" + dateOfPayment +
+                '}';
     }
 
     public int getId() {
         return id;
     }
+
 
     public void setId(int id) {
         this.id = id;

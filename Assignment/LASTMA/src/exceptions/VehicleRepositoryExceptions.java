@@ -1,4 +1,4 @@
-package data.repositories.exceptions;
+package exceptions;
 
 public class VehicleRepositoryExceptions extends RuntimeException {
     public VehicleRepositoryExceptions(String message) {
