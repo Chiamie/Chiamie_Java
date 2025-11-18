@@ -5,10 +5,12 @@ import data.repositories.*;
 import dtos.requests.RegisterOfficerRequest;
 import dtos.responses.RegisterOfficerResponse;
 
+
 import static utils.Mapper.map;
 
 public class OfficerServiceImpl implements OfficerService {
     private OfficerRepository officers = new Officers();
+
 
 
 
@@ -20,6 +22,13 @@ public class OfficerServiceImpl implements OfficerService {
 
         return new RegisterOfficerResponse();
     }
+
+
+
+
+
+
+
 
 //    @Override
 //    public BookTicketResponse bookTicket(BookTicketRequest request) {

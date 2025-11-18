@@ -11,13 +11,9 @@ import dtos.requests.ViewTicketRequest;
 import dtos.responses.BookTicketResponse;
 import dtos.responses.SettleTicketResponse;
 import dtos.responses.ViewTicketResponse;
-import exceptions.InvalidOffenceException;
-import exceptions.InvalidOfficerEmailException;
-import exceptions.InvalidTicketException;
-import exceptions.VehicleNotExistException;
+import exceptions.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDateTime;
 
 public class TicketServiceImpl implements TicketService {
     private VehicleRepository vehicles;
@@ -38,8 +34,8 @@ public class TicketServiceImpl implements TicketService {
         Ticket ticket = new Ticket();
         ticket.setVehicle(vehicle);
         ticket.setIssuer(officer);
-        
-        validateOffenceType(bookTicketRequest);
+
+        validateOffenceType(bookTicketRequest, ticket);
         Ticket savedTicket = tickets.save(ticket);
         vehicle.getTickets().add(savedTicket);
         vehicles.save(vehicle);
@@ -65,8 +61,7 @@ public class TicketServiceImpl implements TicketService {
     }
 
 
-    private void validateOffenceType(BookTicketRequest bookTicketRequest) {
-        Ticket ticket = new Ticket();
+    private void validateOffenceType(BookTicketRequest bookTicketRequest, Ticket ticket) {
         try {
             ticket.setOffence(Offence.valueOf(bookTicketRequest.getOffence().toUpperCase()));
         }catch (IllegalArgumentException e) {
@@ -83,6 +78,8 @@ public class TicketServiceImpl implements TicketService {
     }
 
 
+
+
     private Vehicle validateVehicleIn(ViewTicketRequest viewTicketRequest) {
         Vehicle vehicle = vehicles.findById(viewTicketRequest.getVehicleId());
         if (vehicle == null) {
@@ -93,23 +90,49 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public SettleTicketResponse settleTicket(SettleTicketRequest settleTicketRequest){
-        Vehicle vehicle = vehicles.findById(settleTicketRequest.getVehicleId());
-        if (vehicle == null) {
-            throw new VehicleNotExistException("Vehicle with " + settleTicketRequest.getVehicleId() + "  not found");
+        Vehicle vehicle = validateVehicle(settleTicketRequest);
+        Ticket ticket = validateTicket(settleTicketRequest);
+        validateTicketPayment(settleTicketRequest);
+        validateOffenceAmount(settleTicketRequest, ticket);
+
+        ticket.setHasPaid(true);
+        ticket.setDateOfPayment(LocalDateTime.now());
+        tickets.save(ticket);
+
+
+        vehicles.save(vehicle);
+        return new SettleTicketResponse();
+    }
+
+    private static void validateOffenceAmount(SettleTicketRequest settleTicketRequest, Ticket ticket) {
+        if(ticket.getOffence().getAmount() != settleTicketRequest.getPaymentTeller()){
+            throw new InvalidAmountException("Invalid settle ticket amount");
         }
+    }
+
+    private Ticket validateTicket(SettleTicketRequest settleTicketRequest) {
         Ticket ticket = tickets.findByTicketNumber(settleTicketRequest.getTicketId());
         if (ticket == null) {
             throw new InvalidTicketException("Ticket with " + settleTicketRequest.getTicketId() + "  not found");
         }
-        List<Ticket> vehicleTickets = vehicle.getTickets();
-        for (Ticket vehicleTicket : vehicleTickets) {
-            if(vehicleTicket.getId() == ticket.getId()) {
-                vehicleTicket.setHasPaid(true);
-                tickets.save(vehicleTicket);
-            }
-        }
-        vehicles.save(vehicle);
-        return new SettleTicketResponse();
+        return ticket;
     }
+
+    private void validateTicketPayment(SettleTicketRequest settleTicketRequest) {
+        Ticket ticket = tickets.findByTicketNumber(settleTicketRequest.getTicketId());
+        if(ticket.isHasPaid())
+            throw new IllegalStateException("Ticket has already been paid");
+    }
+
+    private Vehicle validateVehicle(SettleTicketRequest settleTicketRequest) {
+        Vehicle vehicle = vehicles.findById(settleTicketRequest.getVehicleId());
+        if (vehicle == null) {
+            throw new VehicleNotExistException("Vehicle with " + settleTicketRequest.getVehicleId() + "  not found");
+        }
+        return vehicle;
+    }
+
+
+
 
 }
